@@ -31,7 +31,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyReadonly<T> = {
+export type MyReadonly<T> = {
   readonly [Key in keyof T]: T[Key]
 }
 

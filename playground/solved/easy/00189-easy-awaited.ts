@@ -23,7 +23,7 @@
 /* _____________ Your Code Here _____________ */
 
 type UnWrapPromise<T> = T extends PromiseLike<infer U> ? UnWrapPromise<U> : T
-type MyAwaited<T extends PromiseLike<any>> = UnWrapPromise<T>
+export type MyAwaited<T extends PromiseLike<any>> = UnWrapPromise<T>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

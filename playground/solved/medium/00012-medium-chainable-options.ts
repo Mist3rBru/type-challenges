@@ -39,8 +39,6 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyExclude<T, U> = T extends U ? never : T
-
 type Chainable<T extends Object = {}> = {
   option<K extends string, V>(
     key: K extends keyof T ? never : K,

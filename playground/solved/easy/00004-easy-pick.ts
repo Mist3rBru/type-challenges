@@ -31,7 +31,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyPick<T extends Record<string, any>, K extends keyof T> = {
+export type MyPick<T extends Record<string, any>, K extends keyof T> = {
   [Key in K]: T[Key]
 }
 

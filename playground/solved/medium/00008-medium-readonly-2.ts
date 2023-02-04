@@ -34,8 +34,6 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyExclude<T, U> = T extends U ? never : T
-
 type MyReadonly2<T, K extends keyof T = keyof T> = {
   [Key in MyExclude<keyof T, K>]: T[Key]
 } & {
@@ -44,6 +42,7 @@ type MyReadonly2<T, K extends keyof T = keyof T> = {
 
 /* _____________ Test Cases _____________ */
 import type { Alike, Expect } from '@type-challenges/utils'
+import type { MyExclude } from '../easy/00043-easy-exclude'
 
 type cases = [
   Expect<Alike<MyReadonly2<Todo1>, Readonly<Todo1>>>,

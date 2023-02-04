@@ -20,7 +20,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type TupleToUnion<T> = T extends (infer K)[] ? K : never
+export type TupleToUnion<T> = T extends (infer K)[] ? K : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
