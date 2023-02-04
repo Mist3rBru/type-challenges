@@ -24,7 +24,16 @@
 
 /* _____________ Your Code Here _____________ */
 
-type KebabCase<S> = any
+type KebabCase<S extends string, P extends string = S> =
+  S extends Lowercase<S>
+    ? S
+    : S extends `${infer L}${infer R}`
+      ? L extends Lowercase<L>
+        ? `${L}${KebabCase<R, L>}`
+        : P extends S
+          ? `${Lowercase<L>}${KebabCase<R, L>}`
+          : `-${Lowercase<L>}${KebabCase<R, L>}`
+      : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
