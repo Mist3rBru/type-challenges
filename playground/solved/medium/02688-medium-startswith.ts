@@ -20,7 +20,16 @@
 
 /* _____________ Your Code Here _____________ */
 
-type StartsWith<T extends string, U extends string> = any
+type StartsWith<T extends string, U extends string> =
+  T extends U
+    ? true
+    : T extends `${infer L1}${infer R1}`
+      ? U extends `${infer L2}${infer R2}`
+        ? L1 extends L2
+          ? StartsWith<R1, R2>
+          : false
+        : true
+      : false
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
