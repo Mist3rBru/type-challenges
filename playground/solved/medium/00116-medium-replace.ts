@@ -1,16 +1,16 @@
 /*
-  116 - Replace
+  116 - MyReplace
   -------
   by Anthony Fu (@antfu) #medium #template-literal
 
   ### Question
 
-  Implement `Replace<S, From, To>` which replace the string `From` with `To` once in the given string `S`
+  Implement `MyReplace<S, From, To>` which replace the string `From` with `To` once in the given string `S`
 
   For example
 
   ```ts
-  type replaced = Replace<'types are fun!', 'fun', 'awesome'> // expected to be 'types are awesome!'
+  type replaced = MyReplace<'types are fun!', 'fun', 'awesome'> // expected to be 'types are awesome!'
   ```
 
   > View on GitHub: https://tsch.js.org/116
@@ -18,7 +18,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Replace<
+export type MyReplace<
   S extends string,
   From extends string,
   To extends string,
@@ -28,19 +28,17 @@ type Replace<
     ? `${Left}${To}${Right}`
     : S
 
-type T = Replace<'foobarbar', 'bar', 'foo'>
-
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
 type cases = [
-  Expect<Equal<Replace<'foobar', 'bar', 'foo'>, 'foofoo'>>,
-  Expect<Equal<Replace<'foobarbar', 'bar', 'foo'>, 'foofoobar'>>,
-  Expect<Equal<Replace<'foobarbar', '', 'foo'>, 'foobarbar'>>,
-  Expect<Equal<Replace<'foobarbar', 'bar', ''>, 'foobar'>>,
-  Expect<Equal<Replace<'foobarbar', 'foo', 'bra'>, 'brabarbar'>>,
-  Expect<Equal<Replace<'foobarbar', 'bra', 'foo'>, 'foobarbar'>>,
-  Expect<Equal<Replace<'', '', ''>, ''>>,
+  Expect<Equal<MyReplace<'foobar', 'bar', 'foo'>, 'foofoo'>>,
+  Expect<Equal<MyReplace<'foobarbar', 'bar', 'foo'>, 'foofoobar'>>,
+  Expect<Equal<MyReplace<'foobarbar', '', 'foo'>, 'foobarbar'>>,
+  Expect<Equal<MyReplace<'foobarbar', 'bar', ''>, 'foobar'>>,
+  Expect<Equal<MyReplace<'foobarbar', 'foo', 'bra'>, 'brabarbar'>>,
+  Expect<Equal<MyReplace<'foobarbar', 'bra', 'foo'>, 'foobarbar'>>,
+  Expect<Equal<MyReplace<'', '', ''>, ''>>,
 ]
 
 /* _____________ Further Steps _____________ */
