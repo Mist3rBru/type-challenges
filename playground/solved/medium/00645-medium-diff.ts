@@ -12,7 +12,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Diff<O, O1> = any
+ type Diff<A, B, C = A & B> = {
+   [K in Exclude<keyof C, keyof A> | Exclude<keyof C, keyof B>]: C[K]
+ }
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
