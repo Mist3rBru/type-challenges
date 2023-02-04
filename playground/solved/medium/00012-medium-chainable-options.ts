@@ -40,7 +40,7 @@
 /* _____________ Your Code Here _____________ */
 
 type Chainable<T extends Object = {}> = {
-  option<K extends string, V>(
+  option<K extends keyof T | string, V>(
     key: K extends keyof T ? never : K,
     value: V,
   ): Chainable<

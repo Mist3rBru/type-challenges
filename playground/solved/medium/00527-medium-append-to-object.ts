@@ -19,7 +19,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type AppendToObject<T, U, V> = any
+type AppendToObject<T extends Record<string, any>, U extends string, V> = {
+  [K in (keyof T | U)]: K extends U ? V : T[K]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
