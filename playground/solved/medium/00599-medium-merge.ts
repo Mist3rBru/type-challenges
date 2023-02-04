@@ -27,7 +27,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Merge<F, S> = any
+type Merge<F extends Record<string, any>, S extends Record<string, any>> = {
+  [K in (keyof F | keyof S)]: K extends keyof S ? S[K] : K extends keyof F ? F[K] : never;
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -41,8 +43,10 @@ type Bar = {
   c: boolean
 }
 
+type Result = Merge<Foo, Bar>
+
 type cases = [
-  Expect<Equal<Merge<Foo, Bar>, {
+  Expect<Equal<Result, {
     a: number
     b: number
     c: boolean
