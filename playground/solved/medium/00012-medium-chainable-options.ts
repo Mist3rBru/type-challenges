@@ -39,9 +39,20 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Chainable = {
-  option(key: string, value: any): any
-  get(): any
+type MyExclude<T, U> = T extends U ? never : T
+
+type Chainable<T extends Object = {}> = {
+  option<K extends string, V>(
+    key: K extends keyof T ? never : K,
+    value: V,
+  ): Chainable<
+    {
+      [P in keyof T]: P extends K ? V : T[P]
+    } & {
+      [P in K]: V
+    }
+  >
+  get(): T
 }
 
 /* _____________ Test Cases _____________ */
