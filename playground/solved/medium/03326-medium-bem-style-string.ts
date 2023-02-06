@@ -16,7 +16,16 @@
 
 /* _____________ Your Code Here _____________ */
 
-type BEM<B extends string, E extends string[], M extends string[]> = any
+type ArrayValue<T extends string[]> = {
+  [K in Exclude<keyof T, keyof any[]>]: T[K] & string
+}[Exclude<keyof T, keyof any[]>]
+
+type BEM<B extends string, E extends string[], M extends string[]> =
+  E['length'] extends 0
+    ? `${B}--${ArrayValue<M>}`
+    : M['length'] extends 0
+      ? `${B}__${ArrayValue<E>}`
+      : `${B}__${ArrayValue<E>}--${ArrayValue<M>}`
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
