@@ -18,7 +18,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type TrimRight<S extends string> = any
+type Empty = ' ' | '\n' | '\t'
+
+type TrimRight<S extends string> = S extends `${infer R}${Empty}` ? TrimRight<R> : S
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
