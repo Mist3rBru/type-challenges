@@ -18,7 +18,10 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Trunc = any
+type Trunc<T extends number | string> =
+  `${T}` extends `${infer L}.${string}`
+    ? L
+    : `${T}`
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
