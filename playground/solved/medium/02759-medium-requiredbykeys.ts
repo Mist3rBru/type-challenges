@@ -27,7 +27,15 @@
 
 /* _____________ Your Code Here _____________ */
 
-type RequiredByKeys<T, K> = any
+type Flatten <T> = {
+  [Key in keyof T]: T[Key]
+}
+
+type RequiredByKeys<T, K extends keyof T = keyof T> = Flatten<{
+  [Key in K]-?: T[Key]
+} & {
+  [Key in Exclude<keyof T, K>]?: T[Key]
+}>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
