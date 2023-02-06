@@ -39,7 +39,24 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MapTypes<T, R> = any
+type Reference = {
+  mapFrom: unknown
+  mapTo: unknown
+}
+
+type Dist<T, R> = R extends Reference
+  ? T extends R['mapFrom']
+    ? R['mapTo']
+    : never
+  : never
+
+type Default<T, D> = [T] extends [never] ? D : T
+
+type MapTypes<T, R> = {
+  [K in keyof T]: Default<Dist<T[K], R>, T[K]>;
+}
+
+type T = MapTypes<{ name: string; date: Date }, { mapFrom: string; mapTo: boolean } | { mapFrom: Date; mapTo: string }>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
