@@ -16,7 +16,14 @@
 
 /* _____________ Your Code Here _____________ */
 
-type NumberRange<L, H> = any
+type Range<E extends number, A extends any[] = []> =
+  A['length'] extends E
+    ? [...A, A['length']]
+    : Range<E, [...A, A['length']]>
+
+type NumberRange<S extends number, E extends number> = {
+  [K in Exclude<keyof Range<E>, Exclude<keyof Range<S>, `${S}`>>]: K extends `${infer D extends number}` ? D : never
+}[Exclude<keyof Range<E>, Exclude<keyof Range<S>, `${S}`>>]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
