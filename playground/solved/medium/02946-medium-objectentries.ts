@@ -23,7 +23,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ObjectEntries<T> = any
+type ObjectEntries<T extends Record<string, any>> = {
+  [K in keyof T]-?: [K, T[K] extends infer U | undefined ? U : T[K]]
+}[keyof T]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
