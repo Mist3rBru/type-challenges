@@ -12,7 +12,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Filter<T extends any[], P> = []
+type Filter<T extends any[], P> =
+  T extends [infer L, ...infer R]
+    ? L extends P
+      ? [L, ...Filter<R, P>]
+      : Filter<R, P>
+    : []
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
