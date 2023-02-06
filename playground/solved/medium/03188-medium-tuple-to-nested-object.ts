@@ -18,7 +18,18 @@
 
 /* _____________ Your Code Here _____________ */
 
-type TupleToNestedObject<T, U> = any
+type ArrayIndex<T extends any[]> = Exclude<keyof T, keyof any[]>
+type ArrayKeys<T extends any[]> = { [K in ArrayIndex<T>]: T[K] }[ArrayIndex<T>]
+
+type TupleToNestedObject<T extends any[], U> =
+  T extends [infer First, ...infer Rest]
+    ? First extends string
+      ? { [K in First]: TupleToNestedObject<Rest, U> }
+      : never
+    : U
+
+type I = ArrayIndex<['a', 'b']>
+type T = TupleToNestedObject<['a', 'b'], number>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
