@@ -28,7 +28,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function Currying(fn: any): any
+type Curry<T extends any[]> =
+  T extends [infer F, ...infer R]
+    ? (arg: F) => Curry<R>
+    : true
+
+declare function Currying<P extends any[]>(fn: (...args: P) => any): P['length'] extends 0 ? () => true : Curry<P>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
