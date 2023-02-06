@@ -12,7 +12,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Integer<T> = any
+type Integer<T extends number | string> =
+  number extends T
+    ? never
+    : `${T}` extends `${string}.${string}`
+      ? never
+      : T
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -25,6 +30,7 @@ type cases1 = [
   Expect<Equal<Integer<1>, 1>>,
   Expect<Equal<Integer<1.1>, never>>,
   Expect<Equal<Integer<1.0>, 1>>,
+  Expect<Equal<Integer<10>, 10>>,
   Expect<Equal<Integer<typeof x>, never>>,
   Expect<Equal<Integer<typeof y>, 1>>,
 ]
