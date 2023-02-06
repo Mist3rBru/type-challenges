@@ -20,7 +20,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Flip<T> = any
+type Flip<T extends Record<string, any>> = {
+  [K in keyof T as `${T[K]}`]: K
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect, NotEqual } from '@type-challenges/utils'
