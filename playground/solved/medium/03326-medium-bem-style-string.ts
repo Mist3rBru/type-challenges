@@ -16,7 +16,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ArrayValue<T extends string[]> = {
+export type ArrayValue<T extends string[]> = {
   [K in Exclude<keyof T, keyof any[]>]: T[K] & string
 }[Exclude<keyof T, keyof any[]>]
 

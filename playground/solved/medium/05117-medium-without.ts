@@ -18,7 +18,21 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Without<T, U> = any
+type ArrayValue<T extends any[]> = {
+  [K in Exclude<keyof T, keyof any[]>]: T[K]
+}[Exclude<keyof T, keyof any[]>]
+
+type Value<T> =
+  T extends any[]
+    ? ArrayValue<T>
+    : T
+
+type Without<T extends any[], U extends any | any[]> =
+  T extends [infer F, ...infer R]
+    ? F extends Value<U>
+      ? Without<R, U>
+      : [F, ...Without<R, U>]
+    : []
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
