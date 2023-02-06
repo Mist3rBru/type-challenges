@@ -19,7 +19,9 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MinusOne<T extends number> = any
+type MinusOne<T extends number> = Number<`${T}-1`>
+
+type T = MinusOne<10>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
