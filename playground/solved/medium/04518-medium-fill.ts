@@ -19,12 +19,26 @@
 
 /* _____________ Your Code Here _____________ */
 
+type Range<
+    E extends number,
+    R extends any[] = [],
+> =
+  R['length'] extends E
+    ? R
+    : Range<E, [...R, R['length']]>
+
+type Between<S extends number, E extends number> = {
+  [K in Exclude<keyof Range<E>, keyof Range<S>>]: K
+}[Exclude<keyof Range<E>, keyof Range<S>>]
+
 type Fill<
-  T extends unknown[],
+  T extends any[],
   N,
-  Start extends number = 0,
-  End extends number = T['length'],
-> = any
+  S extends number = 0,
+  E extends number = T['length'],
+> = {
+  [K in keyof T]: K extends Between<S, E> ? N : T[K]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
