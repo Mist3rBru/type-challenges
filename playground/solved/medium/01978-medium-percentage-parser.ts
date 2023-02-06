@@ -32,7 +32,28 @@
 
 /* _____________ Your Code Here _____________ */
 
-type PercentageParser<A extends string> = any
+type PercentOperator<T extends string> =
+  T extends `${infer L}${string}`
+    ? L extends '+' | '-'
+      ? L
+      : ''
+    : ''
+
+type PercentNumber<T extends string> =
+  T extends `${infer L}${infer R}`
+    ? L extends '+' | '-' | '%'
+      ? PercentNumber<R>
+      : `${L}${PercentNumber<R>}`
+    : ''
+
+type PercentSignal<T extends string> =
+  T extends `${infer L}${infer R}`
+    ? L extends '%'
+      ? L
+      : PercentSignal<R>
+    : ''
+
+type PercentageParser<A extends string> = [PercentOperator<A>, PercentNumber<A>, PercentSignal<A>]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
