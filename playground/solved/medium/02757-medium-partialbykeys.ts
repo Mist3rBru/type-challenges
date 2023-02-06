@@ -26,7 +26,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type PartialByKeys<T, K> = any
+type Flatten<T> = {
+  [Key in keyof T]: T[Key]
+}
+
+type PartialByKeys<T, K extends keyof T = keyof T> = Flatten<{
+  [Key in Exclude<keyof T, K>]: T[Key]
+} & {
+  [Key in K]?: T[Key]
+}>
+
+type T = PartialByKeys<User, 'name'>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
