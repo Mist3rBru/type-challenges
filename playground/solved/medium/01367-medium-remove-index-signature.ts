@@ -25,7 +25,18 @@
 
 /* _____________ Your Code Here _____________ */
 
-type RemoveIndexSignature<T> = any
+type LiteralTypeOnly<T> =
+  string extends T
+    ? never
+    : number extends T
+      ? never
+      : symbol extends T
+        ? never
+        : T
+
+type RemoveIndexSignature<T> = {
+  [K in keyof T as LiteralTypeOnly<K>]: T[K]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
