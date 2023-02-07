@@ -21,7 +21,14 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Fibonacci<T extends number> = any
+type FibonacciReference = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144]
+
+type Fibonacci<I extends number, R extends any[] = FibonacciReference, D extends any[] = [any]> =
+  R extends [infer F, ...infer Rest]
+    ? I extends D['length']
+      ? F
+      : Fibonacci<I, Rest, [...D, any]>
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -31,6 +38,8 @@ type cases = [
   Expect<Equal<Fibonacci<2>, 1>>,
   Expect<Equal<Fibonacci<3>, 2>>,
   Expect<Equal<Fibonacci<8>, 21>>,
+  Expect<Equal<Fibonacci<12>, 144>>,
+  Expect<Equal<Fibonacci<13>, never>>,
 ]
 
 /* _____________ Further Steps _____________ */
