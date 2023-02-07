@@ -19,7 +19,16 @@
 
 /* _____________ Your Code Here _____________ */
 
-type CamelCase<S extends string> = any
+type CamelCase<S extends string, P extends string = ''> =
+  S extends `${infer F}${infer R}`
+    ? F extends '_'
+      ? P extends ''
+        ? `${F}${CamelCase<R, F>}`
+        : CamelCase<R, F>
+      : P extends '_'
+        ? `${Uppercase<F>}${CamelCase<R, F>}`
+        : `${Lowercase<F>}${CamelCase<R, F>}`
+    : ''
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
