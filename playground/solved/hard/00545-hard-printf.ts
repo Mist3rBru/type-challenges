@@ -21,7 +21,33 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Format<T extends string> = any
+type ControlsMap = {
+  c: string
+  s: string
+  d: number
+  o: string
+  h: string
+  f: number
+  p: number
+}
+
+type ConcatFn <T, K> =
+  T extends (...args: infer P) => infer R
+    ? (...args: P) => ConcatFn<R, K>
+    : K
+
+type Format<S extends string, P extends string = '', Y = string> =
+  S extends `${infer F}${infer R}`
+    ? F extends '%'
+      ? P extends '%' | '%%'
+        ? Format<R, `${P}${F}`, Y>
+        : Format<R, F, Y>
+      : P extends '%' | '%%%'
+        ? F extends keyof ControlsMap
+          ? Format<R, F, ConcatFn<Y, (arg: ControlsMap[F]) => string>>
+          : Format<R, F, Y>
+        : Format<R, F, Y>
+    : Y
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
