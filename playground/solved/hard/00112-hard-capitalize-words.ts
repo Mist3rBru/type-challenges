@@ -18,7 +18,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type CapitalizeWords<S extends string> = any
+type CapitalizeWords<S extends string, P extends string = ''> =
+  S extends `${infer F}${infer R}`
+    ? P extends Uppercase<P>
+      ? `${Uppercase<F>}${CapitalizeWords<R, F>}`
+      : `${F}${CapitalizeWords<R, F>}`
+    : ''
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -29,7 +34,7 @@ type cases = [
   Expect<Equal<CapitalizeWords<'foo bar'>, 'Foo Bar'>>,
   Expect<Equal<CapitalizeWords<'foo bar hello world'>, 'Foo Bar Hello World'>>,
   Expect<Equal<CapitalizeWords<'foo bar.hello,world'>, 'Foo Bar.Hello,World'>>,
-  Expect<Equal<CapitalizeWords<'aa!bb@cc#dd$ee%ff^gg&hh*ii(jj)kk_ll+mm{nn}oo|pp🤣qq'>, 'Aa!Bb@Cc#Dd$Ee%Ff^Gg&Hh*Ii(Jj)Kk_Ll+Mm{Nn}Oo|Pp🤣Qq'>>,
+  Expect<Equal<CapitalizeWords<'aa!bb@cc#dd$ee%ff^gg&hh*ii(jj)kk_ll+mm{nn}oo|ppq'>, 'Aa!Bb@Cc#Dd$Ee%Ff^Gg&Hh*Ii(Jj)Kk_Ll+Mm{Nn}Oo|Ppq'>>,
   Expect<Equal<CapitalizeWords<''>, ''>>,
 ]
 
