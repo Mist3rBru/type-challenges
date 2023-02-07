@@ -25,7 +25,34 @@
 
 /* _____________ Your Code Here _____________ */
 
-type GreaterThan<T extends number, U extends number> = any
+type LengthOfString<S extends string | number, H extends any[] = []> =
+  `${S}` extends `${string}${infer R}`
+    ? LengthOfString<R, [...H, any]>
+    : H['length']
+
+type LessThan<T extends number | string, U extends number | string> =
+  `${U}` extends '0'
+    ? false
+    : '0123456789' extends `${string}${T}${string}${U}${string}`
+      ? true
+      : false
+
+type GreaterThan<T extends number | string, U extends number | string> =
+  T extends U
+    ? false
+    : `${T}` extends `${infer F1}${infer R1}`
+      ? `${U}` extends `${infer F2}${infer R2}`
+        ? LengthOfString<T> extends LengthOfString<U>
+          ? LessThan<F1, F2> extends true
+            ? false
+            : LengthOfString<T> & LengthOfString<U> extends 1
+              ? true
+              : GreaterThan<R1, R2>
+          : LessThan<LengthOfString<T>, LengthOfString<U>> extends true
+            ? false
+            : true
+        : never
+      : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -36,6 +63,7 @@ type cases = [
   Expect<Equal<GreaterThan<4, 5>, false>>,
   Expect<Equal<GreaterThan<0, 0>, false>>,
   Expect<Equal<GreaterThan<10, 9>, true>>,
+  Expect<Equal<GreaterThan<19, 28>, false>>,
   Expect<Equal<GreaterThan<20, 20>, false>>,
   Expect<Equal<GreaterThan<10, 100>, false>>,
   Expect<Equal<GreaterThan<111, 11>, true>>,
