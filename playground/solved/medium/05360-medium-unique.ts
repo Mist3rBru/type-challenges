@@ -20,12 +20,25 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Unique<T> = any
+type IsUnique<T extends any[], U> =
+  T extends [infer F, ...infer R]
+    ? Equal<F, U> extends true
+      ? false
+      : IsUnique<R, U>
+    : true
+
+type Unique<T extends any[], U extends any[]=[]> =
+  T extends [infer F, ...infer R]
+    ? IsUnique<U, F> extends true
+      ? Unique<R, [...U, F]>
+      : Unique<R, U>
+    : U
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
 type cases = [
+  Expect<Equal<Unique<[]>, []>>,
   Expect<Equal<Unique<[1, 1, 2, 2, 3, 3]>, [1, 2, 3]>>,
   Expect<Equal<Unique<[1, 2, 3, 4, 4, 5, 6, 7]>, [1, 2, 3, 4, 5, 6, 7]>>,
   Expect<Equal<Unique<[1, 'a', 2, 'b', 2, 'a']>, [1, 'a', 2, 'b']>>,
