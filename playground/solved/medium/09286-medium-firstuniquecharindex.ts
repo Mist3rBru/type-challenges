@@ -12,7 +12,35 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FirstUniqueCharIndex<T extends string> = any
+type IsUnique<S extends string, U extends string> =
+  S extends `${infer F}${infer R}`
+    ? F extends U
+      ? false
+      : IsUnique<R, U>
+    : true
+
+type NoChar<S extends string, U extends string> =
+  S extends `${infer F}${infer R}`
+    ? F extends U
+      ? NoChar<R, U>
+      : `${F}${NoChar<R, U>}`
+    : S
+
+type StringIndex<S extends string, U extends string, K extends any[] = []> =
+  S extends `${infer F}${infer R}`
+    ? F extends U
+      ? K['length']
+      : StringIndex<R, U, [...K, any]>
+    : -1
+
+type FirstUniqueCharIndex<T extends string, U extends string = '', T2 extends string = T> =
+  T extends `${infer F}${infer R}`
+    ? IsUnique<U, F> extends true
+      ? FirstUniqueCharIndex<R, `${U}${F}`, T2>
+      : FirstUniqueCharIndex<R, NoChar<U, F>, T2>
+    : U extends `${infer FU}${string}`
+      ? StringIndex<T2, FU>
+      : -1
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
