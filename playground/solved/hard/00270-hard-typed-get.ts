@@ -33,7 +33,23 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Get<T, K> = string
+type Split<S extends string, U extends string, K extends string = '', Y extends string[] = []> =
+  S extends `${infer F}${infer R}`
+    ? F extends U
+      ? Split<R, U, '', [...Y, K]>
+      : Split<R, U, `${K}${F}`, Y>
+    : K extends ''
+      ? Y
+      : [...Y, K]
+
+type GetValue<T, K extends any[]> =
+  K extends [infer F, ...infer R]
+    ? F extends keyof T
+      ? GetValue<T[F], R>
+      : never
+    : T
+
+type Get<T, K extends string> = GetValue<T, [K]> | GetValue<T, Split<K, '.'>>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
