@@ -46,7 +46,19 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function SimpleVue(options: any): any
+type Computed<T> = {
+  [K in keyof T]: T[K] extends ((...args: any[]) => infer R) ? R : T[K]
+}
+
+type Options<D, C, M> = {
+  data?: (this: never) => D
+  computed?: C & ThisType<D & Computed<C>>
+  methods?: M & ThisType<D & Computed<C> & M>
+}
+
+declare function SimpleVue<D, C, M>(options: Options<D, C, M>): any
+
+declare function alert(log: any): void
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
