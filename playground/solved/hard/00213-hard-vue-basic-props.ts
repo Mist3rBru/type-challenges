@@ -48,7 +48,32 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function VueBasicProps(options: any): any
+type Computed<T> = {
+  [K in keyof T]: T[K] extends ((...args: any[]) => infer R)
+    ? R
+    : T[K] extends { type: infer C }
+      ? C extends (...args: any) => any
+        ? ReturnType<C>
+        : C extends (infer U extends (...args: any) => any)[]
+          ? ReturnType<U>
+          : C extends abstract new (...args: any) => any
+            ? InstanceType<C>
+            : never
+      : T[K] extends {}
+        ? any
+        : T[K]
+}
+
+type Options<P, D, C, M> = {
+  props?: P
+  data?: (this: Computed<P>) => D
+  computed?: C & ThisType<Computed<P> & D & Computed<C>>
+  methods?: M & ThisType<Computed<P> & D & Computed<C> & M>
+}
+
+declare function VueBasicProps<P, D, C, M>(options: Options<P, D, C, M>): any
+
+declare function alert(log: any): void
 
 /* _____________ Test Cases _____________ */
 import type { Debug, Equal, Expect, IsAny } from '@type-challenges/utils'
