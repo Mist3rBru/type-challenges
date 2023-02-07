@@ -22,7 +22,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type All = any
+type All<T extends any[], U> =
+  T extends [infer F, ...infer R]
+    ? Equal<F, U> extends true
+      ? All<R, U>
+      : false
+    : true
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
