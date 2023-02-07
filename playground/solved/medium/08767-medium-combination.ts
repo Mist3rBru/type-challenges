@@ -18,7 +18,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Combination<T extends string[]> = any
+type InferArray<T extends any[]> = T extends (infer U)[] ? U : never
+
+type Combinations<T extends string, U=T> =
+  U extends T
+    ? U | `${U} ${Combinations<Exclude<T, U>>}`
+    : never
+
+type Combination<T extends string[]> =
+  T extends (infer U extends string)[]
+    ? Combinations<U>
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
