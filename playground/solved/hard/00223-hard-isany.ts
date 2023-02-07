@@ -14,7 +14,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type IsAny<T> = any
+type IsAny<T> = 0 extends (1 & T) ? true : false
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
