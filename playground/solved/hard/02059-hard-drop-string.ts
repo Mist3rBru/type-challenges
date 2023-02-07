@@ -18,7 +18,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type DropString<S, R> = any
+type StringToUnion<S extends string> =
+  S extends `${infer F}${infer R}`
+    ? F | StringToUnion<R>
+    : ''
+
+type DropString<S extends string, K extends string> =
+  S extends `${infer F}${infer R}`
+    ? F extends StringToUnion<K>
+      ? DropString<R, K>
+      : `${F}${DropString<R, K>}`
+    : ''
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
