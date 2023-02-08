@@ -38,7 +38,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Path<T> = any
+type Primitive = null | undefined | string | number | boolean | symbol | bigint
+
+type Path<T, K extends any[] = []> =
+  T extends Primitive
+    ? K
+    : K | Path<T[keyof T], [...K, keyof T]>
 
 /* _____________ Test Cases _____________ */
 import type { ExpectExtends, ExpectFalse, ExpectTrue } from '@type-challenges/utils'
@@ -56,6 +61,7 @@ declare const example: {
 }
 
 type cases = [
+  ExpectTrue<ExpectExtends<Path<typeof example>, ['foo'] | ['foo', 'bar'] | ['foo', 'bar', 'a'] | ['foo', 'baz'] | ['foo', 'baz', 'b']>>,
   ExpectTrue<ExpectExtends<Path<typeof example['foo']['bar']>, ['a']>>,
   ExpectTrue<ExpectExtends<Path<typeof example['foo']['baz']>, ['b'] | ['c'] >>,
   ExpectTrue<ExpectExtends<Path<typeof example['foo']>, ['bar'] | ['baz'] | ['bar', 'a'] | ['baz', 'b'] | ['baz', 'c']>>,
