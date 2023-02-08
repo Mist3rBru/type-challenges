@@ -21,7 +21,31 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ObjectKeyPaths<T extends object> = any
+type Primitive = null | undefined | string | number | boolean | symbol | bigint
+
+type ArrayKey = number
+
+type IsTuple<T extends readonly any[]> = number extends T['length'] ? false : true
+
+type TupleKeys<T extends readonly any[]> = Exclude<keyof T, keyof any[]>
+
+type PathConcat<TKey extends string | number, TValue> =
+  TValue extends Primitive
+    ? `${TKey}`
+    : TValue extends any[]
+      ? `${TKey}` | `${TKey}${'.' | '[' | '.['}${ObjectKeyPaths<TValue>}${'' | ']'}`
+      : `${TKey}` | `${TKey}.${ObjectKeyPaths<TValue>}`
+
+type ObjectKeyPaths<T> =
+  T extends readonly (infer V)[]
+    ? IsTuple<T> extends true
+      ? {
+          [K in TupleKeys<T>]-?: PathConcat<K & string, T[K]>;
+        }[TupleKeys<T>]
+      : PathConcat<ArrayKey, V>
+    : {
+        [K in keyof T]-?: PathConcat<K & string, T[K]>;
+      }[keyof T]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect, ExpectExtends } from '@type-challenges/utils'
