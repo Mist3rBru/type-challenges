@@ -77,7 +77,20 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function defineStore(store: unknown): unknown
+type Computed<T> = {
+  [K in keyof T]: T[K] extends ((...args: any[]) => infer R)
+    ? R
+    : T[K]
+}
+
+type Store<S, G, A> = {
+  id: string
+  state: (this: never) => S
+  getters: G & ThisType<Readonly<S> & Computed<G>>
+  actions: A & ThisType<S & A>
+}
+
+declare function defineStore<S, G, A>(store: Store<S, G, A>): Readonly<S> & Computed<G> & A
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
