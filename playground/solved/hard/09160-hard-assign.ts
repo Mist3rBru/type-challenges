@@ -25,7 +25,6 @@
   }
   ```
 
-
   ```ts
   type Target = {
     a: 'a'
@@ -38,7 +37,6 @@
     a: 'a1',
     b: 'b'
   }
-
 
   type Origin2 = {
     b: 'b2',
@@ -60,7 +58,14 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Assign<T extends Record<string, unknown>, U> = any
+type Merge<F extends Record<string, any>, S extends Record<string, any>> = {
+  [K in (keyof F | keyof S)]: K extends keyof S ? S[K] : K extends keyof F ? F[K] : never;
+}
+
+type Assign<T extends Record<string, unknown>, U extends any[]> =
+  U extends [infer F extends Record<string, any>, ...infer R]
+    ? Assign<Merge<T, F>, R>
+    : T
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
