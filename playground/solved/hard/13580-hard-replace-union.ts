@@ -12,7 +12,17 @@
 
 /* _____________ Your Code Here _____________ */
 
-type UnionReplace<T, U extends [any, any][]> = any
+type _UnionReplace<T, U extends [any, any][]> =
+    U extends [infer F extends [any, any], ...infer R extends [any, any][]]
+      ? T extends F[0]
+        ? UnionReplace<Exclude<T, F[0]> | F[1], R>
+        : UnionReplace<T, R>
+      : T
+
+type UnionReplace<T, U extends [any, any][], K=T> =
+  K extends T
+    ? _UnionReplace<K, U>
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
