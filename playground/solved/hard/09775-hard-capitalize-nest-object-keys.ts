@@ -12,7 +12,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type CapitalizeNestObjectKeys<T> = any
+type CapitalizeNestObjectKeys<T> =
+  T extends any[]
+    ? { [K in keyof T]: CapitalizeNestObjectKeys<T[K]> }
+    : T extends Record<string, any>
+      ? { [K in keyof T as K extends string ? Capitalize<K> : K]: CapitalizeNestObjectKeys<T[K]> }
+      : T
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
