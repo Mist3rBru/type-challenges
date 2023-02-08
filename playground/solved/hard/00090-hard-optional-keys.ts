@@ -12,7 +12,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-type OptionalKeys<T> = any
+type _OptionalKeys<T> = {
+  [K in keyof T as T[K] extends Required<T>[K] ? never : K]: K
+}
+
+type OptionalKeys<T> = keyof _OptionalKeys<T>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
