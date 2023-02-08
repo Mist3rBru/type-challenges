@@ -19,7 +19,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-type RequiredKeys<T> = any
+type _RequiredKeys<T> = {
+  [K in keyof T as T[K] extends Required<T>[K] ? K : never]: K
+}
+
+type RequiredKeys<T> = keyof _RequiredKeys<T>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
