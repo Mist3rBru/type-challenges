@@ -18,8 +18,22 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Split<S extends string, SEP extends string> = any
+type Split<S extends string, U extends string, K extends string = '', Y extends string[] = []> =
+  S extends `${infer F}${infer R}`
+    ? U extends ''
+      ? Split<R, U, '', [...Y, F]>
+      : F extends U
+        ? Split<R, U, '', [...Y, K]>
+        : Split<R, U, `${K}${F}`, Y>
+    : string extends S
+      ? string[]
+      : U extends ''
+        ? Y
+        : Y['length'] extends 0
+          ? [K]
+          : [...Y, K]
 
+type T = Split<'Hi! How are you?', 'z'>
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
