@@ -18,7 +18,10 @@
 
 /* _____________ Your Code Here _____________ */
 
-type LengthOfString<S extends string> = number
+type LengthOfString<S extends string, C extends any[] = []> =
+  S extends `${infer F}${infer R}`
+    ? LengthOfString<R, [...C, F]>
+    : C['length']
 
 /* _____________ Test Cases _____________ */
 import type { Equal, IsTrue } from '@type-challenges/utils'
