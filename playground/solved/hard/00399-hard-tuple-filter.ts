@@ -17,7 +17,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FilterOut<T extends any[], F> = any
+type FilterOut<T extends any[], U> =
+  T extends [infer F, ...infer R]
+    ? [F] extends [U]
+        ? FilterOut<R, U>
+        : [F, ...FilterOut<R, U>]
+    : T
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
