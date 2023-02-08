@@ -19,7 +19,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type IsPalindrome<T> = any
+type IsPalindrome<T extends string | number, K extends string = '', Z extends string =`${T}`> =
+  `${T}` extends `${infer F}${infer R}`
+    ? IsPalindrome<R, `${F}${K}`, Z>
+    : Z extends K
+      ? true
+      : false
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
