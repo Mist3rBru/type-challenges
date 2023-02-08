@@ -20,11 +20,22 @@
 
 /* _____________ Your Code Here _____________ */
 
-type SnakeCase<T> = any
+type _SnakeCase<S extends string, P extends string = ''> =
+  S extends `${infer F}${infer R}`
+    ? P extends ''
+      ? `${P}${_SnakeCase<R, F>}`
+      : P extends Uppercase<P>
+        ? `_${Lowercase<P>}${_SnakeCase<R, F>}`
+        : `${P}${_SnakeCase<R, F>}`
+    : Lowercase<P>
+
+type SnakeCase<T extends string, K=T> =
+  K extends T
+    ? _SnakeCase<K>
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
-import { ExpectFalse, NotEqual } from '@type-challenges/utils'
 
 type cases = [
   Expect<Equal<SnakeCase<'hello'>, 'hello'>>,
