@@ -36,7 +36,14 @@
 
 /* _____________ Your Code Here _____________ */
 
-type DeepReadonly<T> = any
+type Primitive = null | undefined | string | number | boolean | symbol | bigint
+
+type Fn = ((...args: any[]) => any)
+
+type DeepReadonly<T extends Record<string, any>> =
+  T extends Record<string, any>
+    ? { readonly [K in keyof T]: T[K] extends Primitive | Fn ? T[K] : DeepReadonly<T[K] & {}> }
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
