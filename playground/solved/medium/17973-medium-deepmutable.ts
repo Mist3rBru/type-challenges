@@ -54,7 +54,14 @@
 
 /* _____________ Your Code Here _____________ */
 
-type DeepMutable = any
+type Primitive = null | undefined | string | number | boolean | symbol | bigint
+
+type Fn = ((...args: any[]) => any)
+
+type DeepMutable<T extends Record<string, any>> =
+  T extends Record<string, any>
+    ? { -readonly [K in keyof T]: T[K] extends Primitive | Fn ? T[K] : DeepMutable<T[K] & {}> }
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -67,6 +74,9 @@ interface Test1 {
     readonly author: string
   }
 }
+
+type T = DeepMutable<Test2>
+
 type Test2 = {
   readonly a: () => 1
   readonly b: string
