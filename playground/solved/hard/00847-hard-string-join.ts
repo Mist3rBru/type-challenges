@@ -32,7 +32,26 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function join(delimiter: any): (...parts: any[]) => any
+type UnionToIntersection<U> = (
+  U extends U ? (x: U) => unknown : never
+) extends (x: infer R) => unknown
+  ? R
+  : never
+
+type UnionToTuple<T> = UnionToIntersection<
+  T extends any ? () => T : never
+> extends () => infer ReturnType
+  ? [...UnionToTuple<Exclude<T, ReturnType>>, ReturnType]
+  : []
+
+type Join<Del extends string, Parts extends any[]> =
+    Parts extends [infer First extends string, ...infer Rest]
+      ? Rest['length'] extends 0
+        ? First
+        : `${First}${Del}${Join<Del, Rest>}`
+      : never
+
+declare function join<D extends string>(delimiter: D): <P extends string=''>(...parts: P[]) => Join<D, UnionToTuple<P>>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
